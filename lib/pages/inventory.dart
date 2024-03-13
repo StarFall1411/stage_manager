@@ -73,7 +73,7 @@ class _InventoryPageState extends State<InventoryPage> {
                                     child: Row(
                                       children: [
                                         Image.asset(
-                                          'assets/chair.jpg',
+                                          'assets/default.png',
                                           height: 80.0,
                                           width: 80.0,
                                         ),
