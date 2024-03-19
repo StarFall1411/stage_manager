@@ -13,6 +13,8 @@ class AddItemPage extends StatefulWidget {
 
 class _AddItemPageState extends State<AddItemPage> {
   TextEditingController nameController = TextEditingController();
+  TextEditingController locationController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,38 +34,77 @@ class _AddItemPageState extends State<AddItemPage> {
   }
 
   Widget _body(){
+    double screenWidth = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: (){
         FocusScope.of(context).unfocus();
       },
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 10.0,
-          ),
-          const Text('Name'),
-          TextField(
-            controller: nameController, //TODO add the ability to tap out of this
-          ),
-          Card(
-            child: TextButton(
-              onPressed: () {
-                IsarService isar = IsarService();
-                InventoryItem newItem = InventoryItem(
-                    nameController.value.text,
-                    "picture.jpg",
-                    "This is a description.",
-                    "Hallway",
-                    widget.addItemType);
-                isar.addItem(newItem);
-                nameController.clear();
-                setState(() {});
-                FocusScope.of(context).unfocus();
-              },
-              child: const Text("Submit"),
+      child: Center(
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 10.0,
             ),
-          )
-        ],
+            SizedBox(
+              width: screenWidth - 30.0,//TODO decide on width
+              child: TextField(
+                controller: nameController, //TODO add the ability to tap out of this
+                decoration: const InputDecoration(
+                  labelText: 'Name',
+                  contentPadding: EdgeInsets.all(8),
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20.0,),
+            SizedBox(
+              width: screenWidth - 30.0,
+              child: TextField(
+                controller: locationController, //TODO add the ability to tap out of this
+                decoration: const InputDecoration(
+                  labelText: 'Location',
+                  contentPadding: EdgeInsets.all(8),
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20.0,),
+            SizedBox(
+              width: screenWidth - 30.0,
+              child: TextField(
+                controller: descriptionController, //TODO add the ability to tap out of this
+                decoration: const InputDecoration(
+                  labelText: 'Description',
+                  contentPadding: EdgeInsets.all(8),
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 3,
+                minLines: 2,
+              ),
+            ),
+            Card(
+              child: TextButton( //TODO create dialog confirming item has been made
+                onPressed: () {
+                  IsarService isar = IsarService();
+                  InventoryItem newItem = InventoryItem(
+                      nameController.value.text,
+                      "picture.jpg",
+                      descriptionController.value.text,
+                      locationController.value.text,
+                      widget.addItemType);
+                  isar.addItem(newItem);
+                  nameController.clear();
+                  locationController.clear();
+                  descriptionController.clear();
+                  setState(() {});
+                  FocusScope.of(context).unfocus();
+                  Navigator.pop(context);
+                },
+                child: const Text("Submit"),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
