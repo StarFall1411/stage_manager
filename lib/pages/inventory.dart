@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:stage_manager/models/inventory_item_model.dart';
 import 'package:stage_manager/pages/choose_add.dart';
+import 'package:stage_manager/pages/view_item.dart';
 
 import '../isar_service.dart';
 
@@ -67,19 +68,28 @@ class _InventoryPageState extends State<InventoryPage> {
                           Expanded(
                             child: ListView.builder(
                               itemBuilder: (BuildContext context, int index) {
-                                return Card(
-                                  child: SizedBox(
-                                    width: screenWidth - 15.0,
-                                    child: Row(
-                                      children: [
-                                        Image.asset(
-                                          'assets/default.png',
-                                          height: 80.0,
-                                          width: 80.0,
-                                        ),
-                                        Text(inventoryItems?[index].name ??
-                                            'No Item')
-                                      ],
+                                return GestureDetector(
+                                  onTap: (){
+                                    if(inventoryItems?[index] != null){
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) => ViewItemPage(inventoryItem: inventoryItems![index],)));
+                                    }
+                                    //TODO put a message saying like item doesnt exist or something like that
+                                  },
+                                  child: Card(
+                                    child: SizedBox(
+                                      width: screenWidth - 15.0,
+                                      child: Row(
+                                        children: [
+                                          Image.asset(
+                                            'assets/default.png',
+                                            height: 80.0,
+                                            width: 80.0,
+                                          ),
+                                          Text(inventoryItems?[index].name ??
+                                              'No Item')
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 );
