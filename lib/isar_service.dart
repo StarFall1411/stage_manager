@@ -34,6 +34,21 @@ class IsarService {
     return await isar.inventoryItems.where().findAll();
   }
 
+  Future<void> deleteItem(InventoryItem item)async{
+    final isar = await db;
+    bool success = false;
+    await isar.writeTxn(()async{
+      success = await isar.inventoryItems.delete(item.id);
+    });
+
+    if(success){
+      //TODO give good feedback
+    }else{
+      //TODO give bad feedback
+      print("Did not delete");
+    }
+  }
+
   // Future<void> saveCourse(Course newCourse) async {
   //   final isar = await db;
   //   isar.writeTxnSync<int>(() => isar.courses.putSync(newCourse));

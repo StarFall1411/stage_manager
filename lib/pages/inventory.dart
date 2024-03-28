@@ -26,7 +26,8 @@ class _InventoryPageState extends State<InventoryPage> {
         title: const Text('Inventory'),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+            },
             icon: const Icon(Icons.settings),
           )
         ],
