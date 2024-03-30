@@ -1,7 +1,8 @@
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:stage_manager/models/inventory_item_model.dart';
-import 'inventory_model.dart';
+import 'package:stage_manager/models/tag_model.dart';
+import 'models/inventory_model.dart';
 
 class IsarService {
   late Future<Isar> db;
@@ -14,7 +15,7 @@ class IsarService {
     if (Isar.instanceNames.isEmpty) {
       final dir = await getApplicationDocumentsDirectory();
       return await Isar.open(
-        [InventorySchema,InventoryItemSchema],
+        [InventorySchema,InventoryItemSchema,TagSchema],
         inspector: true,
         directory: dir.path,
       );
@@ -47,6 +48,13 @@ class IsarService {
       //TODO give bad feedback
       print("Did not delete");
     }
+  }
+
+  Future<void> addTag(Tag newTag)async{
+    final isar = await db;
+    isar.writeTxnSync((){
+      isar.tags.putSync(newTag);
+    });
   }
 
   // Future<void> saveCourse(Course newCourse) async {

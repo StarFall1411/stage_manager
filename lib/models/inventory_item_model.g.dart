@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of '../models/inventory_item_model.dart';
+part of 'inventory_item_model.dart';
 
 // **************************************************************************
 // IsarCollectionGenerator
@@ -57,6 +57,13 @@ const InventoryItemSchema = CollectionSchema(
       target: r'Inventory',
       single: false,
       linkName: r'items',
+    ),
+    r'tags': LinkSchema(
+      id: 8561457634310219373,
+      name: r'tags',
+      target: r'Tag',
+      single: false,
+      linkName: r'inventoryItems',
     )
   },
   embeddedSchemas: {},
@@ -165,7 +172,7 @@ Id _inventoryItemGetId(InventoryItem object) {
 }
 
 List<IsarLinkBase<dynamic>> _inventoryItemGetLinks(InventoryItem object) {
-  return [object.inventory];
+  return [object.inventory, object.tags];
 }
 
 void _inventoryItemAttach(
@@ -173,6 +180,7 @@ void _inventoryItemAttach(
   object.id = id;
   object.inventory
       .attach(col, col.isar.collection<Inventory>(), r'inventory', id);
+  object.tags.attach(col, col.isar.collection<Tag>(), r'tags', id);
 }
 
 extension InventoryItemQueryWhereSort
@@ -1029,6 +1037,67 @@ extension InventoryItemQueryLinks
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(
           r'inventory', lower, includeLower, upper, includeUpper);
+    });
+  }
+
+  QueryBuilder<InventoryItem, InventoryItem, QAfterFilterCondition> tags(
+      FilterQuery<Tag> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.link(q, r'tags');
+    });
+  }
+
+  QueryBuilder<InventoryItem, InventoryItem, QAfterFilterCondition>
+      tagsLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'tags', length, true, length, true);
+    });
+  }
+
+  QueryBuilder<InventoryItem, InventoryItem, QAfterFilterCondition>
+      tagsIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'tags', 0, true, 0, true);
+    });
+  }
+
+  QueryBuilder<InventoryItem, InventoryItem, QAfterFilterCondition>
+      tagsIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'tags', 0, false, 999999, true);
+    });
+  }
+
+  QueryBuilder<InventoryItem, InventoryItem, QAfterFilterCondition>
+      tagsLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'tags', 0, true, length, include);
+    });
+  }
+
+  QueryBuilder<InventoryItem, InventoryItem, QAfterFilterCondition>
+      tagsLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'tags', length, include, 999999, true);
+    });
+  }
+
+  QueryBuilder<InventoryItem, InventoryItem, QAfterFilterCondition>
+      tagsLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(
+          r'tags', lower, includeLower, upper, includeUpper);
     });
   }
 }

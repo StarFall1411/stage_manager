@@ -1,8 +1,8 @@
 import 'package:isar/isar.dart';
 
-import 'models/inventory_item_model.dart';
+import 'inventory_item_model.dart';
 
-part 'g_files/inventory_model.g.dart';
+part 'inventory_model.g.dart';
 
 @collection
 class Inventory {

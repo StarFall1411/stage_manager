@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of '../inventory_model.dart';
+part of 'inventory_model.dart';
 
 // **************************************************************************
 // IsarCollectionGenerator

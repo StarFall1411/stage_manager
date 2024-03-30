@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:stage_manager/models/inventory_item_model.dart';
+import 'package:stage_manager/models/tag_model.dart';
 import 'package:stage_manager/pages/choose_add.dart';
 import 'package:stage_manager/pages/view_item.dart';
 
@@ -27,6 +28,9 @@ class _InventoryPageState extends State<InventoryPage> {
         actions: [
           IconButton(
             onPressed: () {
+              IsarService isar = IsarService();
+              Tag newTag = Tag("First Tag");
+              isar.addTag(newTag);
             },
             icon: const Icon(Icons.settings),
           )

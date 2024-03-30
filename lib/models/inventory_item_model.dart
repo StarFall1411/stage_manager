@@ -1,8 +1,9 @@
 import 'package:isar/isar.dart';
+import 'package:stage_manager/models/tag_model.dart';
 
-import '../inventory_model.dart';
+import 'inventory_model.dart';
 
-part '../g_files/inventory_item_model.g.dart';
+part 'inventory_item_model.g.dart';
 
 enum ItemType { prop, furniture, costume }
 
@@ -21,6 +22,12 @@ class InventoryItem {
 
   @Backlink(to: 'items')
   final inventory = IsarLinks<Inventory>();
+
+  @Backlink(to: "inventoryItems")
+  final tags = IsarLinks<Tag>();
+
+  // @Backlink(to: 'tags')
+  // IsarLinks<Tag> tag = IsarLinks<Tag>();
 
   InventoryItem(String name,String? picture,String? description,String? location,ItemType itemType){
     this.name = name;
