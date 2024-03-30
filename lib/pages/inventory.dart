@@ -28,9 +28,6 @@ class _InventoryPageState extends State<InventoryPage> {
         actions: [
           IconButton(
             onPressed: () {
-              IsarService isar = IsarService();
-              Tag newTag = Tag("First Tag");
-              isar.addTag(newTag);
             },
             icon: const Icon(Icons.settings),
           )

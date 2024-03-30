@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:stage_manager/models/inventory_item_model.dart';
 import 'package:stage_manager/pages/add_item.dart';
 
+import 'add_tag.dart';
+
 class ChooseAddPage extends StatefulWidget {
   const ChooseAddPage({super.key});
 
@@ -56,7 +58,13 @@ class _ChooseAddPageState extends State<ChooseAddPage> {
             }, child: const Text("Furniture")),
           ),
           Card(
-            child: TextButton(onPressed: () {}, child: const Text("Tags")),
+            child: TextButton(onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const AddTagPage(
+                      )));
+            }, child: const Text("Tag")),
           ),
         ],
       ),
