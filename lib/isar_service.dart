@@ -57,6 +57,11 @@ class IsarService {
     });
   }
 
+  Future<List<Tag>> getAllTags() async {
+    final isar = await db;
+    return await isar.tags.where().findAll();
+  }
+
   // Future<void> saveCourse(Course newCourse) async {
   //   final isar = await db;
   //   isar.writeTxnSync<int>(() => isar.courses.putSync(newCourse));

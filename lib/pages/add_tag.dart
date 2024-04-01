@@ -26,10 +26,10 @@ class _AddTagPageState extends State<AddTagPage> {
     );
   }
 
-  Widget _body(){
+  Widget _body() {
     double screenWidth = MediaQuery.of(context).size.width;
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         FocusScope.of(context).unfocus();
       },
       child: Center(
@@ -39,9 +39,10 @@ class _AddTagPageState extends State<AddTagPage> {
               height: 10.0,
             ),
             SizedBox(
-              width: screenWidth - 30.0,//TODO decide on width
+              width: screenWidth - 30.0, //TODO decide on width
               child: TextField(
-                controller: nameController, //TODO add the ability to tap out of this
+                controller: nameController,
+                //TODO add the ability to tap out of this
                 decoration: const InputDecoration(
                   labelText: 'Name',
                   contentPadding: EdgeInsets.all(8),
@@ -49,8 +50,10 @@ class _AddTagPageState extends State<AddTagPage> {
                 ),
               ),
             ),
+            const SizedBox(height: 10.0),
             Card(
-              child: TextButton( //TODO create dialog confirming item has been made
+              child: TextButton(
+                //TODO create dialog confirming item has been made
                 onPressed: () {
                   IsarService isar = IsarService();
                   Tag newTag = Tag(nameController.value.text);
@@ -69,3 +72,4 @@ class _AddTagPageState extends State<AddTagPage> {
     );
   }
 }
+
