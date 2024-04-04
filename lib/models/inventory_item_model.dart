@@ -29,12 +29,6 @@ class InventoryItem {
   // @Backlink(to: 'tags')
   // IsarLinks<Tag> tag = IsarLinks<Tag>();
 
-  InventoryItem(String name,String? picture,String? description,String? location,ItemType itemType){
-    this.name = name;
-    this.picture = picture;
-    this.description = description;
-    this.location = location;
-    this.itemType = itemType;
-  }
+  InventoryItem(this.name,this.picture,this.description,this.location,this.itemType);
 
 }

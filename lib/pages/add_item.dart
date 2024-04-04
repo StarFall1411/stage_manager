@@ -107,6 +107,7 @@ class _AddItemPageState extends State<AddItemPage> {
                 //TODO create dialog confirming item has been made
                 onPressed: () {
                   IsarService isar = IsarService();
+                  //Creates new item, then inserts it(Initializes links)
                   InventoryItem newItem = InventoryItem(
                       nameController.value.text,
                       "picture.jpg",
@@ -114,6 +115,9 @@ class _AddItemPageState extends State<AddItemPage> {
                       locationController.value.text,
                       widget.addItemType);
                   isar.addItem(newItem);
+                  //Sets the links
+                  isar.addTagsToItem(newItem, selectedTags);
+                  //Cleans stuff up on the page
                   nameController.clear();
                   locationController.clear();
                   descriptionController.clear();
