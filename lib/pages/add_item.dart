@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stage_manager/models/inventory_item_model.dart';
 import 'package:stage_manager/isar_service.dart';
@@ -18,6 +19,9 @@ class _AddItemPageState extends State<AddItemPage> {
   TextEditingController locationController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   IsarService isar = IsarService();
+
+  List<Tag> selectedTags = [];
+
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +106,12 @@ class _AddItemPageState extends State<AddItemPage> {
                         child: Text("Snapshot has error"),
                       );
                     } else if (snapshot.hasData) {
-                      List<Tag>? tags = snapshot.data;
+                      List<Tag> tags = snapshot.data ?? [];
+                      return Expanded(
+                        child: ListView(
+                          children: [_tagTable(tags)],
+                        ),
+                      );
                       List<Tag> chosenTags = [];
                       return Expanded(
                           child: Center(
@@ -113,12 +122,12 @@ class _AddItemPageState extends State<AddItemPage> {
                             itemCount: tags?.length,
                             itemBuilder: (BuildContext context, int index) {
                               return GestureDetector(
-                                onTap: (){
+                                onTap: () {
                                   //Has just been chosen
-                                  if(!chosenTags.contains(tags[index])){
+                                  if (!chosenTags.contains(tags[index])) {
                                     chosenTags.add(tags[index]);
                                     //Has been deselected
-                                  }else{
+                                  } else {
                                     chosenTags.remove(tags[index]);
                                   }
                                 },
@@ -129,7 +138,9 @@ class _AddItemPageState extends State<AddItemPage> {
                                     child: Row(
                                       children: [
                                         Text(tags?[index].name ?? "No Tag"),
-                                        chosenTags.contains(tags![index]) ? const Text("Selected"):const Text("Not Selected"),
+                                        chosenTags.contains(tags![index])
+                                            ? const Text("Selected")
+                                            : const Text("Not Selected"),
                                       ],
                                     ),
                                   ),
@@ -174,4 +185,36 @@ class _AddItemPageState extends State<AddItemPage> {
       ),
     );
   }
+
+  Widget _tagTable(List<Tag> tags) {
+    final columns = ["Tag Name"];
+    return DataTable(
+      columns: _getColumns(columns),
+      rows: _getRows(tags),
+    );
+  }
+
+  List<DataColumn> _getColumns(List<String> columns) => columns
+      .map((String column) => DataColumn(
+            label: Text(column),
+          ))
+      .toList();
+
+  List<DataRow> _getRows(List<Tag> tags) => tags
+      .map((Tag tag) => DataRow(
+              selected: selectedTags.contains(tag),
+              onSelectChanged: (isSelected) {
+                final isAdding = isSelected != null && isSelected;
+
+                isAdding ? selectedTags.add(tag) : selectedTags.remove(tag);
+                // setState(() {
+                //   final isAdding = isSelected != null && isSelected;
+                //
+                //   isAdding ? selectedTags.add(tag) : selectedTags.remove(tag);
+                // });
+              },
+              cells: [
+                DataCell(Text(tag.name)),
+              ]))
+      .toList();
 }
