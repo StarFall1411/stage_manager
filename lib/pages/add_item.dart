@@ -7,8 +7,9 @@ import '../models/tag_model.dart';
 
 class AddItemPage extends StatefulWidget {
   final ItemType addItemType;
+  final List<Tag> tags;
 
-  const AddItemPage({Key? key, required this.addItemType}) : super(key: key);
+  const AddItemPage({Key? key, required this.addItemType,required this.tags}) : super(key: key);
 
   @override
   State<AddItemPage> createState() => _AddItemPageState();
@@ -21,7 +22,6 @@ class _AddItemPageState extends State<AddItemPage> {
   IsarService isar = IsarService();
 
   List<Tag> selectedTags = [];
-
 
   @override
   Widget build(BuildContext context) {
@@ -97,66 +97,11 @@ class _AddItemPageState extends State<AddItemPage> {
               ),
             ),
             SizedBox(height: 10.0),
-            FutureBuilder(
-                future: isar.getAllTags(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    if (snapshot.hasError) {
-                      return const Card(
-                        child: Text("Snapshot has error"),
-                      );
-                    } else if (snapshot.hasData) {
-                      List<Tag> tags = snapshot.data ?? [];
-                      return Expanded(
-                        child: ListView(
-                          children: [_tagTable(tags)],
-                        ),
-                      );
-                      List<Tag> chosenTags = [];
-                      return Expanded(
-                          child: Center(
-                              child: Column(
-                        children: [
-                          Expanded(
-                              child: ListView.builder(
-                            itemCount: tags?.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  //Has just been chosen
-                                  if (!chosenTags.contains(tags[index])) {
-                                    chosenTags.add(tags[index]);
-                                    //Has been deselected
-                                  } else {
-                                    chosenTags.remove(tags[index]);
-                                  }
-                                },
-                                child: Card(
-                                  child: SizedBox(
-                                    height: 50.0,
-                                    width: 1.0,
-                                    child: Row(
-                                      children: [
-                                        Text(tags?[index].name ?? "No Tag"),
-                                        chosenTags.contains(tags![index])
-                                            ? const Text("Selected")
-                                            : const Text("Not Selected"),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          )),
-                        ],
-                      )));
-                    }
-                  }
-                  return const Card(
-                    child: Text(
-                        "Connection not done."), //TODO make this a CircularProgressIndicator()
-                  );
-                }),
+            Expanded(
+              child: ListView(
+                children: [_tagTable(widget.tags)],
+              ),
+            ),
             Card(
               child: TextButton(
                 //TODO create dialog confirming item has been made
@@ -203,16 +148,12 @@ class _AddItemPageState extends State<AddItemPage> {
   List<DataRow> _getRows(List<Tag> tags) => tags
       .map((Tag tag) => DataRow(
               selected: selectedTags.contains(tag),
-              onSelectChanged: (isSelected) {
-                final isAdding = isSelected != null && isSelected;
+              onSelectChanged: (isSelected) =>
+                setState(() {
+                  final isAdding = isSelected != null && isSelected;
 
-                isAdding ? selectedTags.add(tag) : selectedTags.remove(tag);
-                // setState(() {
-                //   final isAdding = isSelected != null && isSelected;
-                //
-                //   isAdding ? selectedTags.add(tag) : selectedTags.remove(tag);
-                // });
-              },
+                  isAdding ? selectedTags.add(tag) : selectedTags.remove(tag);
+                }),
               cells: [
                 DataCell(Text(tag.name)),
               ]))
