@@ -5,7 +5,9 @@ import 'package:stage_manager/isar_service.dart';
 import '../models/tag_model.dart';
 
 class AddTagPage extends StatefulWidget {
-  const AddTagPage({Key? key}) : super(key: key);
+  final List<InventoryItem> inventoryItems;
+
+  const AddTagPage({Key? key,required this.inventoryItems}) : super(key: key);
 
   @override
   State<AddTagPage> createState() => _AddTagPageState();
@@ -13,6 +15,7 @@ class AddTagPage extends StatefulWidget {
 
 class _AddTagPageState extends State<AddTagPage> {
   TextEditingController nameController = TextEditingController();
+  List<InventoryItem> selectedInventoryItems = [];
 
   @override
   Widget build(BuildContext context) {
@@ -51,13 +54,21 @@ class _AddTagPageState extends State<AddTagPage> {
               ),
             ),
             const SizedBox(height: 10.0),
+            Expanded(
+                child: ListView(
+              children: [_itemTable(widget.inventoryItems)],
+            )),
             Card(
               child: TextButton(
                 //TODO create dialog confirming item has been made
                 onPressed: () {
                   IsarService isar = IsarService();
+                  //Add tag
                   Tag newTag = Tag(nameController.value.text);
                   isar.addTag(newTag);
+                  //Add items to a tag
+                  isar.addTagToItems(selectedInventoryItems,newTag);
+                  //clean up stuff
                   nameController.clear();
                   setState(() {});
                   FocusScope.of(context).unfocus();
@@ -71,5 +82,30 @@ class _AddTagPageState extends State<AddTagPage> {
       ),
     );
   }
-}
 
+  Widget _itemTable(List<InventoryItem> inventoryItems) {
+    //TODO add photos to this later
+    final columns = ["Item Name"];
+    return DataTable(columns: _getColumns(columns), rows: _getRows(inventoryItems),);
+  }
+
+  List<DataColumn> _getColumns(List<String> columns) => columns
+      .map((String column) => DataColumn(
+    label: Text(column),
+  ))
+      .toList();
+
+  List<DataRow> _getRows(List<InventoryItem> inventoryItems) => inventoryItems
+      .map((InventoryItem inventoryItem) => DataRow(
+      selected: selectedInventoryItems.contains(inventoryItem),
+      onSelectChanged: (isSelected) =>
+          setState(() {
+            final isAdding = isSelected != null && isSelected;
+
+            isAdding ? selectedInventoryItems.add(inventoryItem) : selectedInventoryItems.remove(inventoryItem);
+          }),
+      cells: [
+        DataCell(Text(inventoryItem.name)),
+      ]))
+      .toList();
+}

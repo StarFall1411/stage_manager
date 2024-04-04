@@ -44,6 +44,18 @@ class IsarService {
     });
   }
 
+  Future<void> addTagToItems(List<InventoryItem> inventoryItems,Tag newTag) async{
+    final isar = await db;
+    for(InventoryItem inventoryItem in inventoryItems){
+      InventoryItem? item = await isar.inventoryItems.where().idEqualTo(inventoryItem.id).findFirst();
+      item!.tags.load();
+      item.tags.add(newTag);
+      isar.writeTxnSync((){
+        isar.inventoryItems.putSync(item);
+      });
+    }
+  }
+
   Future<List<InventoryItem>> getAllInventoryItems() async {
     final isar = await db;
     return await isar.inventoryItems.where().findAll();

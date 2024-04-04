@@ -91,11 +91,20 @@ class _ChooseAddPageState extends State<ChooseAddPage> {
           ),
           Card(
             child: TextButton(
-                onPressed: () {
+                onPressed: () async{
+                  List<InventoryItem> inventoryItems = [];
+                  await isar.getAllInventoryItems().then((value) {
+                    setState(() {
+                      inventoryItems = value;
+                    });
+                  });
+
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const AddTagPage()));
+                          builder: (context) => AddTagPage(
+                            inventoryItems: inventoryItems,
+                          )));
                 },
                 child: const Text("Tag")),
           ),
