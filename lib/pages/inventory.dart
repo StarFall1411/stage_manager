@@ -64,7 +64,7 @@ class _InventoryPageState extends State<InventoryPage> {
       const SizedBox(height: 10.0),
       Expanded(
         child: StreamBuilder<List<InventoryItem>>(
-            stream: isar.getAllFilteredInventoryItems(searchString),
+            stream: isar.getAllFilteredInventoryItems(searchString,[]),//TODO replace with selected tags later
             builder: (context, snapshot) {
               List<InventoryItem> inventoryItems = snapshot.data ?? [];
               return Center(

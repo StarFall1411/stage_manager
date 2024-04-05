@@ -61,9 +61,11 @@ class IsarService {
     return await isar.inventoryItems.where().findAll();
   }
 
-  Stream<List<InventoryItem>> getAllFilteredInventoryItems(String searchString) async* {//TODO better searches
+  Stream<List<InventoryItem>> getAllFilteredInventoryItems(String searchString,List<Tag> filterTags) async* {//TODO better searches
     final isar = await db;
-    final query = isar.inventoryItems.where().filter().nameContains(searchString,caseSensitive: false);
+    final query = isar.inventoryItems.where().filter().nameContains(searchString,caseSensitive: false).tags((q){
+      return q.allOf(filterTags, (q, Tag tag) => q.idEqualTo(tag.id));
+    }).sortByName();
 
     await for(final results in query.watch(fireImmediately: true)){
       if(results.isNotEmpty){
