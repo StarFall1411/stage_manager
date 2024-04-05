@@ -61,6 +61,17 @@ class IsarService {
     return await isar.inventoryItems.where().findAll();
   }
 
+  Stream<List<InventoryItem>> getAllFilteredInventoryItems(String searchString) async* {//TODO better searches
+    final isar = await db;
+    final query = isar.inventoryItems.where().filter().nameContains(searchString,caseSensitive: false);
+
+    await for(final results in query.watch(fireImmediately: true)){
+      if(results.isNotEmpty){
+        yield results;
+      }
+    }
+  }
+
   Future<void> deleteItem(InventoryItem item)async{
     final isar = await db;
     bool success = false;
