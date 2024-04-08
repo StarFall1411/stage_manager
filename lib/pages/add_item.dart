@@ -28,6 +28,7 @@ class _AddItemPageState extends State<AddItemPage> {
   List<Tag> selectedTags = [];
   final picker = ImagePicker();
   String _imagePath = 'assets/default.png';
+  late File _image;
 
   @override
   Widget build(BuildContext context) {
@@ -212,12 +213,15 @@ class _AddItemPageState extends State<AddItemPage> {
 
     setState(() async {
       if (pickedImage != null) {
-        final Directory directory = await getApplicationDocumentsDirectory();
-        final String path = directory.path;
-        final File createdFile = File(pickedImage.path);
-        final File newImage = await createdFile.copy('$path/image1.png');
-        _imagePath = newImage.path;
+        _image = File(pickedImage.path);
       }
+      // if (pickedImage != null) {
+      //   final Directory directory = await getApplicationDocumentsDirectory();
+      //   final String path = directory.path;
+      //   final File createdFile = File(pickedImage.path);
+      //   final File newImage = await createdFile.copy('$path/image1.png');
+      //   _imagePath = newImage.path;
+      // }
     });
   }
 
