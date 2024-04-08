@@ -75,10 +75,12 @@ class _AddItemPageState extends State<AddItemPage> {
                       _image!,
                       height: 225.0,
                       width: 225.0,
+                fit: BoxFit.cover,
                     ),
             ),
             //TODO put a button to default to the default photo
             //TODO put something to help the user to know to tap to take a new photo
+            SizedBox(height: 10.0,),
             SizedBox(
               width: screenWidth - 30.0, //TODO decide on width
               child: TextField(
