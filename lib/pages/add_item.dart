@@ -13,7 +13,8 @@ class AddItemPage extends StatefulWidget {
   final ItemType addItemType;
   final List<Tag> tags;
 
-  const AddItemPage({Key? key, required this.addItemType,required this.tags}) : super(key: key);
+  const AddItemPage({Key? key, required this.addItemType, required this.tags})
+      : super(key: key);
 
   @override
   State<AddItemPage> createState() => _AddItemPageState();
@@ -28,7 +29,7 @@ class _AddItemPageState extends State<AddItemPage> {
   List<Tag> selectedTags = [];
   final picker = ImagePicker();
   String _imagePath = 'assets/default.png';
-  late File _image;
+  File? _image;
 
   @override
   Widget build(BuildContext context) {
@@ -61,10 +62,20 @@ class _AddItemPageState extends State<AddItemPage> {
             ),
             const Text('Item Image'),
             GestureDetector(
-              onTap: ()async{
+              onTap: () async {
                 await _showOptions();
               },
-              child: Image.asset(_imagePath,height: 225.0,width: 225.0,),
+              child: _image == null
+                  ? Image.asset(
+                      _imagePath,
+                      height: 225.0,
+                      width: 225.0,
+                    )
+                  : Image.file(
+                      _image!,
+                      height: 225.0,
+                      width: 225.0,
+                    ),
             ),
             //TODO put a button to default to the default photo
             //TODO put something to help the user to know to tap to take a new photo
@@ -168,12 +179,11 @@ class _AddItemPageState extends State<AddItemPage> {
   List<DataRow> _getRows(List<Tag> tags) => tags
       .map((Tag tag) => DataRow(
               selected: selectedTags.contains(tag),
-              onSelectChanged: (isSelected) =>
-                setState(() {
-                  final isAdding = isSelected != null && isSelected;
+              onSelectChanged: (isSelected) => setState(() {
+                    final isAdding = isSelected != null && isSelected;
 
-                  isAdding ? selectedTags.add(tag) : selectedTags.remove(tag);
-                }),
+                    isAdding ? selectedTags.add(tag) : selectedTags.remove(tag);
+                  }),
               cells: [
                 DataCell(Text(tag.name)),
               ]))
@@ -209,9 +219,9 @@ class _AddItemPageState extends State<AddItemPage> {
 
   Future _getImageFromGallery() async {
     final pickedImage =
-    await picker.pickImage(source: ImageSource.gallery); //getImage?
+        await picker.pickImage(source: ImageSource.gallery); //getImage?
 
-    setState(() async {
+    setState((){
       if (pickedImage != null) {
         _image = File(pickedImage.path);
       }
@@ -227,14 +237,12 @@ class _AddItemPageState extends State<AddItemPage> {
 
   Future _getImageFromCamera() async {
     final pickedImage =
-    await picker.pickImage(source: ImageSource.camera); //getImage?
+        await picker.pickImage(source: ImageSource.camera); //getImage?
 
     setState(() {
       if (pickedImage != null) {
-        _imagePath = pickedImage.path;
+        _image = File(pickedImage.path);
       }
     });
   }
 }
-
-
