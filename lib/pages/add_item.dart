@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:stage_manager/models/inventory_item_model.dart';
 import 'package:stage_manager/isar_service.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:math';
 
 import '../models/tag_model.dart';
 
@@ -132,35 +133,52 @@ class _AddItemPageState extends State<AddItemPage> {
               ),
             ),
             Card(
-              child: TextButton(
-                //TODO create dialog confirming item has been made
-                onPressed: () {
-                  IsarService isar = IsarService();
-                  //Creates new item, then inserts it(Initializes links)
-                  InventoryItem newItem = InventoryItem(
-                      nameController.value.text,
-                      "picture.jpg",
-                      descriptionController.value.text,
-                      locationController.value.text,
-                      widget.addItemType);
-                  isar.addItem(newItem);
-                  //Sets the links
-                  isar.addTagsToItem(newItem, selectedTags);
-                  //Cleans stuff up on the page
-                  nameController.clear();
-                  locationController.clear();
-                  descriptionController.clear();
-                  setState(() {});
-                  FocusScope.of(context).unfocus();
-                  Navigator.pop(context);
-                },
-                //TODO tags go here
-                child: const Text("Submit"),
-              ),
+              child: _submitButton(),
             )
           ],
         ),
       ),
+    );
+  }
+
+  Widget _submitButton(){
+    return TextButton(
+      //TODO create dialog confirming item has been made
+      onPressed: () async{
+        IsarService isar = IsarService();
+
+        String itemImagePath;
+        if(_image != null){
+          final Directory applicationDocDirect = await getApplicationDocumentsDirectory();
+          final String copyToPath = applicationDocDirect.path;
+          //TODO filename goes here
+
+          final File newImage = await _image!.copy('$copyToPath/${nameController.value.text}${_random(1, 1000).toString()}.png');
+          itemImagePath = newImage.path;
+        }else{
+          itemImagePath = _imagePath;
+        }
+
+        //Creates new item, then inserts it(Initializes links)
+        InventoryItem newItem = InventoryItem(
+            nameController.value.text,
+            itemImagePath,
+            descriptionController.value.text,
+            locationController.value.text,
+            widget.addItemType);
+        isar.addItem(newItem);
+        //Sets the links
+        isar.addTagsToItem(newItem, selectedTags);
+        //Cleans stuff up on the page
+        nameController.clear();
+        locationController.clear();
+        descriptionController.clear();
+        setState(() {});
+        FocusScope.of(context).unfocus();
+        Navigator.pop(context);
+      },
+      //TODO tags go here
+      child: const Text("Submit"),
     );
   }
 
@@ -227,13 +245,6 @@ class _AddItemPageState extends State<AddItemPage> {
       if (pickedImage != null) {
         _image = File(pickedImage.path);
       }
-      // if (pickedImage != null) {
-      //   final Directory directory = await getApplicationDocumentsDirectory();
-      //   final String path = directory.path;
-      //   final File createdFile = File(pickedImage.path);
-      //   final File newImage = await createdFile.copy('$path/image1.png');
-      //   _imagePath = newImage.path;
-      // }
     });
   }
 
@@ -246,5 +257,9 @@ class _AddItemPageState extends State<AddItemPage> {
         _image = File(pickedImage.path);
       }
     });
+  }
+
+  int _random(int min, int max) {
+    return min + Random().nextInt(max - min);
   }
 }
