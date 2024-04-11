@@ -40,29 +40,36 @@ class _InventoryPageState extends State<InventoryPage> {
               MaterialPageRoute(builder: (context) => const ChooseAddPage()));
         },
         shape: const CircleBorder(),
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add,color: Colors.white,),
       ),
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 10.0,
-          ),
-          SearchBar(
-            hintText: "Search",
-            onChanged: (string) {
-              setState(() {
-                searchString = string;
-              });
-            },
-          ),
-          const SizedBox(height: 10.0),
-          Expanded(
-            child: StreamBuilder<List<InventoryItem>>(
-                stream: isar.getAllFilteredInventoryItems(searchString, []),
-                //TODO replace with selected tags later
-                builder: (context, snapshot) {
-                  List<InventoryItem> inventoryItems = snapshot.data ?? [];
-                  return Center(
+      body: _body(screenWidth),
+    );
+  }
+
+  Widget _body(double screenWidth){
+    return Column(
+      children: [
+        const SizedBox(
+          height: 10.0,
+        ),
+        SearchBar(
+          hintText: "Search",
+          onChanged: (string) {
+            setState(() {
+              searchString = string;
+            });
+          },
+        ),
+        const SizedBox(height: 10.0),
+        Expanded(
+          child: StreamBuilder<List<InventoryItem>>(
+              stream: isar.getAllFilteredInventoryItems(searchString, []),
+              //TODO replace with selected tags later
+              builder: (context, snapshot) {
+                List<InventoryItem> inventoryItems = snapshot.data ?? [];
+                return Center(
+                  child: SizedBox(
+                    width: screenWidth - 20.0,
                     child: Column(children: [
                       Expanded(
                         child: ListView.builder(
@@ -80,32 +87,36 @@ class _InventoryPageState extends State<InventoryPage> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => ViewItemPage(
-                                              inventoryItem:
-                                                  inventoryItems[index],
-                                            )));
+                                          inventoryItem:
+                                          inventoryItems[index],
+                                        )));
                               },
                               child: Card(
-                                child: SizedBox(
-                                  width: screenWidth - 15.0,
-                                  child: Row(
-                                    children: [
-                                      inventoryItems[index]
-                                              .picture!
-                                              .contains("default.png")
-                                          ? Image.asset(
-                                              inventoryItems[index].picture!,
-                                              height: 80.0,
-                                              width: 80.0,
-                                            )
-                                          : Image.file(
-                                              nonDefaultImage,
-                                              height: 80.0,
-                                              width: 80.0,
-                                              fit: BoxFit.cover,
-                                            ),
-                                      Text(inventoryItems[index].name)
-                                    ],
-                                  ),
+                                child: Row(
+                                  children: [
+                                    inventoryItems[index]
+                                        .picture!
+                                        .contains("default.png")
+                                        ? ClipRRect(
+                                      borderRadius: BorderRadius.circular(12.0),
+                                      child: Image.asset(
+                                        inventoryItems[index].picture!,
+                                        height: 80.0,
+                                        width: 80.0,
+                                      ),
+                                    )
+                                        : ClipRRect(
+                                      borderRadius: BorderRadius.circular(12.0),
+                                      child: Image.file(
+                                        nonDefaultImage,
+                                        height: 80.0,
+                                        width: 80.0,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    SizedBox(width: 10.0,),
+                                    Text(inventoryItems[index].name)
+                                  ],
                                 ),
                               ),
                             );
@@ -115,88 +126,11 @@ class _InventoryPageState extends State<InventoryPage> {
                         ),
                       ),
                     ]),
-                  );
-                }),
-          )
-        ],
-      ),
+                  ),
+                );
+              }),
+        )
+      ],
     );
-
-    // Card(
-    //   child: SizedBox(
-    //     height: 80.0,
-    //     width: screenWidth - 15.0,
-    //     child: Text(inventoryItems?[index].name ??
-    //         'No Item'),
-    //   ),
-    // );
   }
-
-// Widget _futureBuilder() {
-//   return FutureBuilder(
-//       future: isar.getAllFilteredInventoryItems(searchController.text),
-//       builder: (context, snapshot) {
-//         if (snapshot.connectionState == ConnectionState.done) {
-//           // If we got an error
-//           if (snapshot.hasError) {
-//             return const Card(
-//               child: Text("Snapshot has error"),
-//             );
-//
-//             // if we got our data
-//           } else if (snapshot.hasData) {
-//             // Extracting data from snapshot object
-//             List<InventoryItem>? inventoryItems = snapshot.data;
-//             return Expanded(
-//               child: Center(
-//                 child: Column(children: [
-//                   Expanded(
-//                     child: ListView.builder(
-//                       itemBuilder: (BuildContext context, int index) {
-//                         return GestureDetector(
-//                           onTap: () {
-//                             if (inventoryItems?[index] != null) {
-//                               Navigator.push(context,
-//                                   MaterialPageRoute(builder: (context) =>
-//                                       ViewItemPage(
-//                                         inventoryItem: inventoryItems![index],)));
-//                             }
-//                             //TODO put a message saying like item doesnt exist or something like that
-//                           },
-//                           child: Card(
-//                             child: SizedBox(
-//                               width: screenWidth - 15.0,
-//                               child: Row(
-//                                 children: [
-//                                   Image.asset(
-//                                     'assets/default.png',
-//                                     height: 80.0,
-//                                     width: 80.0,
-//                                   ),
-//                                   Text(inventoryItems?[index].name ??
-//                                       'No Item')
-//                                 ],
-//                               ),
-//                             ),
-//                           ),
-//                         );
-//                       },
-//                       itemCount: inventoryItems?.length,
-//                       // physics: const NeverScrollableScrollPhysics(), //TODO fix the scrolling
-//                     ),
-//                   ),
-//                 ]),
-//               ),
-//             );
-//           }
-//           return const Card(
-//             child: Text("Other error message"),
-//           );
-//         }
-//         return const Card(
-//           child: Text(
-//               "Connection not done."), //TODO make this a CircularProgressIndicator()
-//         );
-//       })
-// }
 }
