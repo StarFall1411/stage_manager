@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:stage_manager/models/inventory_item_model.dart';
 import 'package:stage_manager/isar_service.dart';
@@ -51,99 +52,105 @@ class _AddItemPageState extends State<AddItemPage> {
 
   Widget _body() {
     double screenWidth = MediaQuery.of(context).size.width;
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: Center(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 10.0,
-            ),
-            const Text('Item Image'),
-            GestureDetector(
-              onTap: () async {
-                await _showOptions();
-              },
-              child: _image == null
-                  ? ClipRRect(
-                borderRadius: BorderRadius.circular(12.0),
-                    child: Image.asset(
-                        _imagePath,
-                        height: 225.0,
-                        width: 225.0,
-                      ),
-                  )
-                  : ClipRRect(
-                borderRadius: BorderRadius.circular(12.0),
-                    child: Image.file(
-                        _image!,
-                        height: 225.0,
-                        width: 225.0,
-                                    fit: BoxFit.cover,
-                      ),
+    return Column(
+      children: [
+        Expanded(
+          child: Center(
+            child: Column(
+              children: [
+                Expanded(
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [Column(
+                      children: [
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        const Text('Item Image'),
+                        GestureDetector(
+                          onTap: () async {
+                            await _showOptions();
+                          },
+                          child: _image == null
+                              ? ClipRRect(
+                            borderRadius: BorderRadius.circular(12.0),
+                                child: Image.asset(
+                                    _imagePath,
+                                    height: 225.0,
+                                    width: 225.0,
+                                  ),
+                              )
+                              : ClipRRect(
+                            borderRadius: BorderRadius.circular(12.0),
+                                child: Image.file(
+                                    _image!,
+                                    height: 225.0,
+                                    width: 225.0,
+                                                fit: BoxFit.cover,
+                                  ),
+                              ),
+                        ),
+                        //TODO put a button to default to the default photo
+                        //TODO put something to help the user to know to tap to take a new photo
+                        SizedBox(height: 10.0,),
+                        SizedBox(
+                          width: screenWidth - 30.0, //TODO decide on width
+                          child: TextField(
+                            controller: nameController,
+                            //TODO add the ability to tap out of this
+                            decoration: const InputDecoration(
+                              labelText: 'Name',
+                              contentPadding: EdgeInsets.all(8),
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20.0,
+                        ),
+                        SizedBox(
+                          width: screenWidth - 30.0,
+                          child: TextField(
+                            controller: locationController,
+                            //TODO add the ability to tap out of this
+                            decoration: const InputDecoration(
+                              labelText: 'Location',
+                              contentPadding: EdgeInsets.all(8),
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20.0,
+                        ),
+                        SizedBox(
+                          width: screenWidth - 30.0,
+                          child: TextField(
+                            controller: descriptionController,
+                            //TODO add the ability to tap out of this
+                            decoration: const InputDecoration(
+                              labelText: 'Description',
+                              contentPadding: EdgeInsets.all(8),
+                              border: OutlineInputBorder(),
+                            ),
+                            maxLines: 3,
+                            minLines: 2,
+                          ),
+                        ),
+                        SizedBox(height: 10.0),
+                        _tagTable(widget.tags),
+                        Card(
+                          child: _submitButton(),
+                        )
+                      ],
+                    ),]
                   ),
-            ),
-            //TODO put a button to default to the default photo
-            //TODO put something to help the user to know to tap to take a new photo
-            SizedBox(height: 10.0,),
-            SizedBox(
-              width: screenWidth - 30.0, //TODO decide on width
-              child: TextField(
-                controller: nameController,
-                //TODO add the ability to tap out of this
-                decoration: const InputDecoration(
-                  labelText: 'Name',
-                  contentPadding: EdgeInsets.all(8),
-                  border: OutlineInputBorder(),
                 ),
-              ),
+              ],
             ),
-            const SizedBox(
-              height: 20.0,
-            ),
-            SizedBox(
-              width: screenWidth - 30.0,
-              child: TextField(
-                controller: locationController,
-                //TODO add the ability to tap out of this
-                decoration: const InputDecoration(
-                  labelText: 'Location',
-                  contentPadding: EdgeInsets.all(8),
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 20.0,
-            ),
-            SizedBox(
-              width: screenWidth - 30.0,
-              child: TextField(
-                controller: descriptionController,
-                //TODO add the ability to tap out of this
-                decoration: const InputDecoration(
-                  labelText: 'Description',
-                  contentPadding: EdgeInsets.all(8),
-                  border: OutlineInputBorder(),
-                ),
-                maxLines: 3,
-                minLines: 2,
-              ),
-            ),
-            SizedBox(height: 10.0),
-            Expanded(
-              child: ListView(
-                children: [_tagTable(widget.tags)],
-              ),
-            ),
-            Card(
-              child: _submitButton(),
-            )
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 
