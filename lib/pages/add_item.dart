@@ -46,6 +46,7 @@ class _AddItemPageState extends State<AddItemPage> {
         centerTitle: true,
         title: Text(title),
       ),
+      floatingActionButton: _submitButtons(),
       body: _body(),
     );
   }
@@ -59,40 +60,43 @@ class _AddItemPageState extends State<AddItemPage> {
             child: Column(
               children: [
                 Expanded(
-                  child: ListView(
-                    shrinkWrap: true,
-                    children: [Column(
+                  child: ListView(shrinkWrap: true, children: [
+                    Column(
                       children: [
                         const SizedBox(
                           height: 10.0,
                         ),
-                        const Text('Item Image'),
+                        const Text('Item Image (Tap to Change)'),
+                        SizedBox(
+                          height: 10.0,
+                        ),
                         GestureDetector(
                           onTap: () async {
                             await _showOptions();
                           },
                           child: _image == null
                               ? ClipRRect(
-                            borderRadius: BorderRadius.circular(12.0),
-                                child: Image.asset(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  child: Image.asset(
                                     _imagePath,
                                     height: 225.0,
                                     width: 225.0,
                                   ),
-                              )
+                                )
                               : ClipRRect(
-                            borderRadius: BorderRadius.circular(12.0),
-                                child: Image.file(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  child: Image.file(
                                     _image!,
                                     height: 225.0,
                                     width: 225.0,
-                                                fit: BoxFit.cover,
+                                    fit: BoxFit.cover,
                                   ),
-                              ),
+                                ),
                         ),
                         //TODO put a button to default to the default photo
-                        //TODO put something to help the user to know to tap to take a new photo
-                        SizedBox(height: 10.0,),
+                        SizedBox(
+                          height: 10.0,
+                        ),
                         SizedBox(
                           width: screenWidth - 30.0, //TODO decide on width
                           child: TextField(
@@ -138,13 +142,17 @@ class _AddItemPageState extends State<AddItemPage> {
                           ),
                         ),
                         SizedBox(height: 10.0),
-                        _tagTable(widget.tags),
-                        Card(
-                          child: _submitButton(),
-                        )
+                        Text(
+                          "Add Tags",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                        SizedBox(
+                            width: screenWidth - 30.0,
+                            child: _tagTable(widget.tags)),
                       ],
-                    ),]
-                  ),
+                    ),
+                  ]),
                 ),
               ],
             ),
@@ -154,21 +162,36 @@ class _AddItemPageState extends State<AddItemPage> {
     );
   }
 
-  Widget _submitButton(){
-    return TextButton(
-      //TODO create dialog confirming item has been made
-      onPressed: () async{
+  Widget _submitButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        _addButton(),
+        SizedBox(
+          width: 10.0,
+        ),
+        _addAnotherButton(),
+      ],
+    );
+  }
+
+  Widget _addButton() {
+    return FloatingActionButton(
+      heroTag: "btn1",
+      onPressed: () async {
         IsarService isar = IsarService();
 
         String itemImagePath;
-        if(_image != null){
-          final Directory applicationDocDirect = await getApplicationDocumentsDirectory();
+        if (_image != null) {
+          final Directory applicationDocDirect =
+              await getApplicationDocumentsDirectory();
           final String copyToPath = applicationDocDirect.path;
           //TODO filename goes here
 
-          final File newImage = await _image!.copy('$copyToPath/${nameController.value.text}${_random(1, 1000).toString()}.png');
+          final File newImage = await _image!.copy(
+              '$copyToPath/${nameController.value.text}${_random(1, 1000).toString()}.png');
           itemImagePath = newImage.path;
-        }else{
+        } else {
           itemImagePath = _imagePath;
         }
 
@@ -190,8 +213,57 @@ class _AddItemPageState extends State<AddItemPage> {
         FocusScope.of(context).unfocus();
         Navigator.pop(context);
       },
-      //TODO tags go here
-      child: const Text("Submit"),
+      shape: const CircleBorder(),
+      child: const Icon(
+        Icons.check,
+        color: Colors.white,
+      ),
+    );
+  }
+
+  Widget _addAnotherButton() {
+    return FloatingActionButton(
+      heroTag: "btn2",
+      onPressed: () async {
+        IsarService isar = IsarService();
+
+        String itemImagePath;
+        if (_image != null) {
+          final Directory applicationDocDirect =
+              await getApplicationDocumentsDirectory();
+          final String copyToPath = applicationDocDirect.path;
+          //TODO filename goes here
+
+          final File newImage = await _image!.copy(
+              '$copyToPath/${nameController.value.text}${_random(1, 1000).toString()}.png');
+          itemImagePath = newImage.path;
+        } else {
+          itemImagePath = _imagePath;
+        }
+
+        //Creates new item, then inserts it(Initializes links)
+        InventoryItem newItem = InventoryItem(
+            nameController.value.text,
+            itemImagePath,
+            descriptionController.value.text,
+            locationController.value.text,
+            widget.addItemType);
+        isar.addItem(newItem);
+        //Sets the links
+        isar.addTagsToItem(newItem, selectedTags);
+        //Cleans stuff up on the page
+        nameController.clear();
+        locationController.clear();
+        descriptionController.clear();
+        setState(() {});
+        FocusScope.of(context).unfocus();
+        Navigator.pop(context);
+      },
+      shape: const CircleBorder(),
+      child: const Icon(
+        Icons.autorenew_rounded,
+        color: Colors.white,
+      ),
     );
   }
 
@@ -254,7 +326,7 @@ class _AddItemPageState extends State<AddItemPage> {
     final pickedImage =
         await picker.pickImage(source: ImageSource.gallery); //getImage?
 
-    setState((){
+    setState(() {
       if (pickedImage != null) {
         _image = File(pickedImage.path);
       }
