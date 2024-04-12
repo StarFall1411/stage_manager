@@ -66,7 +66,7 @@ class _AddItemPageState extends State<AddItemPage> {
                         const SizedBox(
                           height: 10.0,
                         ),
-                        const Text('Item Image (Tap to Change)'),
+                        const Text('Item Image (Tap to Change)',style: TextStyle(fontSize: 20.0),),
                         SizedBox(
                           height: 10.0,
                         ),
@@ -97,6 +97,8 @@ class _AddItemPageState extends State<AddItemPage> {
                         SizedBox(
                           height: 10.0,
                         ),
+                        Text("Item Information",style: TextStyle(fontSize: 20.0),),
+                        SizedBox(height: 10.0,),
                         SizedBox(
                           width: screenWidth - 30.0, //TODO decide on width
                           child: TextField(
