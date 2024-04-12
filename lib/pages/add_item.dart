@@ -67,17 +67,23 @@ class _AddItemPageState extends State<AddItemPage> {
                 await _showOptions();
               },
               child: _image == null
-                  ? Image.asset(
-                      _imagePath,
-                      height: 225.0,
-                      width: 225.0,
-                    )
-                  : Image.file(
-                      _image!,
-                      height: 225.0,
-                      width: 225.0,
-                fit: BoxFit.cover,
-                    ),
+                  ? ClipRRect(
+                borderRadius: BorderRadius.circular(12.0),
+                    child: Image.asset(
+                        _imagePath,
+                        height: 225.0,
+                        width: 225.0,
+                      ),
+                  )
+                  : ClipRRect(
+                borderRadius: BorderRadius.circular(12.0),
+                    child: Image.file(
+                        _image!,
+                        height: 225.0,
+                        width: 225.0,
+                                    fit: BoxFit.cover,
+                      ),
+                  ),
             ),
             //TODO put a button to default to the default photo
             //TODO put something to help the user to know to tap to take a new photo
