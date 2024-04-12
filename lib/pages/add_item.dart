@@ -257,9 +257,11 @@ class _AddItemPageState extends State<AddItemPage> {
         nameController.clear();
         locationController.clear();
         descriptionController.clear();
+        selectedTags = [];
+        _imagePath = 'assets/default.png';
+        _image = null;
         setState(() {});
         FocusScope.of(context).unfocus();
-        Navigator.pop(context);
       },
       shape: const CircleBorder(),
       child: const Icon(
