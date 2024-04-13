@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:stage_manager/models/inventory_item_model.dart';
 import 'package:stage_manager/pages/item_settings.dart';
@@ -35,6 +36,14 @@ class _ViewItemPageState extends State<ViewItemPage> {
 
   Widget _body() {
     double screenWidth = MediaQuery.of(context).size.width;
+    File nonDefaultImage = File('assets/default.png');
+    if (!widget.inventoryItem
+        .picture!
+        .contains("default.png")) {
+      nonDefaultImage =
+          File(widget.inventoryItem.picture!);
+    }
+
     return Center(
       child: SizedBox(
         width: screenWidth - 40.0,
@@ -43,6 +52,13 @@ class _ViewItemPageState extends State<ViewItemPage> {
             const SizedBox(
               height: 10.0,
             ),
+            const Text(
+              "Item Image",
+              style: TextStyle(fontSize: 20.0),
+            ),
+            SizedBox(height: 10.0,),
+            _itemImage(nonDefaultImage),
+            SizedBox(height: 10.0,),
             const Text(
               "Location:",
               style: TextStyle(fontSize: 20.0),
@@ -71,4 +87,28 @@ class _ViewItemPageState extends State<ViewItemPage> {
       ),
     );
   }
+
+  Widget _itemImage(File nonDefaultImage){
+    return widget.inventoryItem
+        .picture!
+        .contains("default.png")
+        ? ClipRRect(
+      borderRadius: BorderRadius.circular(12.0),
+      child: Image.asset(
+        widget.inventoryItem.picture!,
+        height: 225.0,
+        width: 225.0,
+      ),
+    )
+        : ClipRRect(
+      borderRadius: BorderRadius.circular(12.0),
+      child: Image.file(
+        nonDefaultImage,
+        height: 225.0,
+        width: 225.0,
+        fit: BoxFit.cover,
+      ),
+    );
+  }
+
 }
