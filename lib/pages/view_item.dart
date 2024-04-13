@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:stage_manager/models/inventory_item_model.dart';
 import 'package:stage_manager/pages/item_settings.dart';
 
+import '../models/tag_model.dart';
+
 class ViewItemPage extends StatefulWidget {
   final InventoryItem inventoryItem;
 
@@ -89,7 +91,8 @@ class _ViewItemPageState extends State<ViewItemPage> {
                         const Text(
                           "Tags:",
                           style: TextStyle(fontSize: 20.0),
-                        )
+                        ),
+                        _tags(),
                       ],
                     ),
                   ],
@@ -100,6 +103,29 @@ class _ViewItemPageState extends State<ViewItemPage> {
         ),
       ),
     );
+  }
+
+  Widget _tags() {
+    return Column(
+      children: [
+        Row(
+          children: _getWidgetTags(),
+        ),
+      ],
+    );
+  }
+
+  List<Widget> _getWidgetTags() {
+    List<Widget> tagWidgets = [];
+    widget.inventoryItem.tags.load();
+    for (Tag tag in widget.inventoryItem.tags) {
+      tagWidgets.add(
+        Card(
+          child: Text(tag.name),
+        ),
+      );
+    }
+    return tagWidgets;
   }
 
   Widget _nameLocation(double screenWidth) {
