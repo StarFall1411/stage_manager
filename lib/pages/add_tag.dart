@@ -41,6 +41,13 @@ class _AddTagPageState extends State<AddTagPage> {
             const SizedBox(
               height: 10.0,
             ),
+            const Text(
+              'Tag Information',
+              style: TextStyle(fontSize: 20.0),
+            ),
+            const SizedBox(
+              height: 10.0,
+            ),
             SizedBox(
               width: screenWidth - 30.0, //TODO decide on width
               child: TextField(
@@ -54,6 +61,11 @@ class _AddTagPageState extends State<AddTagPage> {
               ),
             ),
             const SizedBox(height: 10.0),
+            const Text(
+              "Add Tags",
+              textAlign: TextAlign.start,
+              style: TextStyle(fontSize: 20.0),
+            ),
             Expanded(
                 child: ListView(
               children: [_itemTable(widget.inventoryItems)],
