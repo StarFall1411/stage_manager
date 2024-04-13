@@ -67,7 +67,9 @@ class _ViewItemPageState extends State<ViewItemPage> {
               "Item Information:",
               style: TextStyle(fontSize: 20.0),
             ),
-            SizedBox(height: 10.0,),
+            SizedBox(
+              height: 10.0,
+            ),
             _nameLocation(screenWidth),
             const SizedBox(
               height: 10.0,
@@ -128,7 +130,11 @@ class _ViewItemPageState extends State<ViewItemPage> {
                     style: TextStyle(fontSize: 20.0),
                   ),
                   Text(
-                    widget.inventoryItem.location ?? "No Location Given",
+                    widget.inventoryItem.location != null
+                        ? widget.inventoryItem.location != ""
+                            ? widget.inventoryItem.location!
+                            : "No Location Given"
+                        : "No Location Given",
                     softWrap: true,
                     textAlign: TextAlign.center,
                   ),
@@ -162,7 +168,11 @@ class _ViewItemPageState extends State<ViewItemPage> {
               height: 5.0,
             ),
             Text(
-              widget.inventoryItem.description ?? "No Description Provided",
+              widget.inventoryItem.description != null
+                  ? widget.inventoryItem.description != ""
+                  ? widget.inventoryItem.description!
+                  : "No Description Given"
+                  : "No Description Given",
               softWrap: true,
               textAlign: TextAlign.center,
             ),

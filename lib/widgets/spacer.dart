@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Spacer extends StatelessWidget {
-  const Spacer(
-      {Key? key})
-      : super(key: key);
+  const Spacer({super.key});
 
   @override
   Widget build(BuildContext context) {
