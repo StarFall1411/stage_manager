@@ -49,39 +49,53 @@ class _ViewItemPageState extends State<ViewItemPage> {
         width: screenWidth - 30.0,
         child: Column(
           children: [
-            const SizedBox(
-              height: 10.0,
-            ),
-            const Text(
-              "Item Image:",
-              style: TextStyle(fontSize: 20.0),
-            ),
-            SizedBox(
-              height: 10.0,
-            ),
-            _itemImage(nonDefaultImage),
-            SizedBox(
-              height: 10.0,
-            ),
-            const Text(
-              "Item Information:",
-              style: TextStyle(fontSize: 20.0),
-            ),
-            SizedBox(
-              height: 10.0,
-            ),
-            _nameLocation(screenWidth),
-            const SizedBox(
-              height: 10.0,
-            ),
-            _description(screenWidth),
-            const SizedBox(
-              height: 10.0,
-            ),
-            const Text(
-              "Tags:",
-              style: TextStyle(fontSize: 20.0),
-            )
+            Expanded(
+                child: Column(
+              children: [
+                ListView(
+                  shrinkWrap: true,
+                  children: [
+                    Column(
+                      children: [
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        const Text(
+                          "Item Image:",
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        _itemImage(nonDefaultImage),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        const Text(
+                          "Item Information:",
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        _nameLocation(screenWidth),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        _description(screenWidth),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        const Text(
+                          "Tags:",
+                          style: TextStyle(fontSize: 20.0),
+                        )
+                      ],
+                    ),
+                  ],
+                )
+              ],
+            ))
           ],
         ),
       ),
@@ -170,8 +184,8 @@ class _ViewItemPageState extends State<ViewItemPage> {
             Text(
               widget.inventoryItem.description != null
                   ? widget.inventoryItem.description != ""
-                  ? widget.inventoryItem.description!
-                  : "No Description Given"
+                      ? widget.inventoryItem.description!
+                      : "No Description Given"
                   : "No Description Given",
               softWrap: true,
               textAlign: TextAlign.center,
