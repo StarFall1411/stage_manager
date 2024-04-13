@@ -98,7 +98,7 @@ class IsarService {
 
   Future<List<Tag>> getAllTags() async {
     final isar = await db;
-    return await isar.tags.where().findAll();
+    return await isar.tags.where().sortByName().findAll();
   }
 
   // Future<void> saveCourse(Course newCourse) async {
