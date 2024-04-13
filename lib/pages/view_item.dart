@@ -19,12 +19,15 @@ class _ViewItemPageState extends State<ViewItemPage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         centerTitle: true,
-        title: Text(widget.inventoryItem.name),
+        title: const Text("View Item"),
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ItemSettingsPage(inventoryItem: widget.inventoryItem)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ItemSettingsPage(
+                          inventoryItem: widget.inventoryItem)));
             },
             icon: const Icon(Icons.settings),
           )
@@ -37,44 +40,39 @@ class _ViewItemPageState extends State<ViewItemPage> {
   Widget _body() {
     double screenWidth = MediaQuery.of(context).size.width;
     File nonDefaultImage = File('assets/default.png');
-    if (!widget.inventoryItem
-        .picture!
-        .contains("default.png")) {
-      nonDefaultImage =
-          File(widget.inventoryItem.picture!);
+    if (!widget.inventoryItem.picture!.contains("default.png")) {
+      nonDefaultImage = File(widget.inventoryItem.picture!);
     }
 
     return Center(
       child: SizedBox(
-        width: screenWidth - 40.0,
+        width: screenWidth - 30.0,
         child: Column(
           children: [
             const SizedBox(
               height: 10.0,
             ),
             const Text(
-              "Item Image",
+              "Item Image:",
               style: TextStyle(fontSize: 20.0),
             ),
-            SizedBox(height: 10.0,),
+            SizedBox(
+              height: 10.0,
+            ),
             _itemImage(nonDefaultImage),
-            SizedBox(height: 10.0,),
-            const Text(
-              "Location:",
-              style: TextStyle(fontSize: 20.0),
-            ),
-            Text(widget.inventoryItem.location ?? ""),
-            const SizedBox(
+            SizedBox(
               height: 10.0,
             ),
             const Text(
-              "Description:",
+              "Item Information:",
               style: TextStyle(fontSize: 20.0),
             ),
-            Text(
-              widget.inventoryItem.description ?? "",
-              textAlign: TextAlign.center,
+            SizedBox(height: 10.0,),
+            _nameLocation(screenWidth),
+            const SizedBox(
+              height: 10.0,
             ),
+            _description(screenWidth),
             const SizedBox(
               height: 10.0,
             ),
@@ -88,27 +86,113 @@ class _ViewItemPageState extends State<ViewItemPage> {
     );
   }
 
-  Widget _itemImage(File nonDefaultImage){
-    return widget.inventoryItem
-        .picture!
-        .contains("default.png")
-        ? ClipRRect(
-      borderRadius: BorderRadius.circular(12.0),
-      child: Image.asset(
-        widget.inventoryItem.picture!,
-        height: 225.0,
-        width: 225.0,
-      ),
-    )
-        : ClipRRect(
-      borderRadius: BorderRadius.circular(12.0),
-      child: Image.file(
-        nonDefaultImage,
-        height: 225.0,
-        width: 225.0,
-        fit: BoxFit.cover,
+  Widget _nameLocation(double screenWidth) {
+    return SizedBox(
+      width: screenWidth - 30.0,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          SizedBox(
+            height: 150.0,
+            width: 175.0,
+            child: Card(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Name:",
+                    softWrap: true,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                  Text(
+                    widget.inventoryItem.name,
+                    softWrap: true,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 150.0,
+            width: 175.0,
+            child: Card(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Location:",
+                    softWrap: true,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                  Text(
+                    widget.inventoryItem.location ?? "No Location Given",
+                    softWrap: true,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
 
+  Widget _description(double screenWidth) {
+    return SizedBox(
+      width: screenWidth - 30.0,
+      child: Card(
+        margin: EdgeInsets.all(5.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 10.0,
+            ),
+            const Text(
+              "Description:",
+              softWrap: true,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20.0),
+            ),
+            SizedBox(
+              height: 5.0,
+            ),
+            Text(
+              widget.inventoryItem.description ?? "No Description Provided",
+              softWrap: true,
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _itemImage(File nonDefaultImage) {
+    return widget.inventoryItem.picture!.contains("default.png")
+        ? ClipRRect(
+            borderRadius: BorderRadius.circular(12.0),
+            child: Image.asset(
+              widget.inventoryItem.picture!,
+              height: 225.0,
+              width: 225.0,
+            ),
+          )
+        : ClipRRect(
+            borderRadius: BorderRadius.circular(12.0),
+            child: Image.file(
+              nonDefaultImage,
+              height: 225.0,
+              width: 225.0,
+              fit: BoxFit.cover,
+            ),
+          );
+  }
 }
