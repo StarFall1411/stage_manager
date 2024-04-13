@@ -66,7 +66,10 @@ class _AddItemPageState extends State<AddItemPage> {
                         const SizedBox(
                           height: 10.0,
                         ),
-                        const Text('Item Image (Tap to Change)',style: TextStyle(fontSize: 20.0),),
+                        const Text(
+                          'Item Image (Tap to Change)',
+                          style: TextStyle(fontSize: 20.0),
+                        ),
                         SizedBox(
                           height: 10.0,
                         ),
@@ -97,8 +100,13 @@ class _AddItemPageState extends State<AddItemPage> {
                         SizedBox(
                           height: 10.0,
                         ),
-                        Text("Item Information",style: TextStyle(fontSize: 20.0),),
-                        SizedBox(height: 10.0,),
+                        Text(
+                          "Item Information",
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
                         SizedBox(
                           width: screenWidth - 30.0, //TODO decide on width
                           child: TextField(
@@ -214,6 +222,17 @@ class _AddItemPageState extends State<AddItemPage> {
         setState(() {});
         FocusScope.of(context).unfocus();
         Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              "Item was Successfully Created!",
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            backgroundColor: Color.fromRGBO(205, 0, 0, 1),
+          ),
+        );
       },
       shape: const CircleBorder(),
       child: const Icon(
@@ -262,6 +281,15 @@ class _AddItemPageState extends State<AddItemPage> {
         _image = null;
         setState(() {});
         FocusScope.of(context).unfocus();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Item was Successfully Created!",style: TextStyle(
+              color: Colors.white,
+            ),),
+            backgroundColor: Color.fromRGBO(205, 0, 0, 1),
+
+          ),
+        );
       },
       shape: const CircleBorder(),
       child: const Icon(
