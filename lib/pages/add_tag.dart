@@ -25,6 +25,7 @@ class _AddTagPageState extends State<AddTagPage> {
         centerTitle: true,
         title: const Text("Add Tag"),
       ),
+      floatingActionButton: _submitButtons(),
       body: _body(),
     );
   }
@@ -62,25 +63,6 @@ class _AddTagPageState extends State<AddTagPage> {
                           ),
                           const SizedBox(height: 10.0),
                           _itemTable(widget.inventoryItems),
-                          Card(
-                            child: TextButton(
-                              //TODO create dialog confirming item has been made
-                              onPressed: () {
-                                IsarService isar = IsarService();
-                                //Add tag
-                                Tag newTag = Tag(nameController.value.text);
-                                isar.addTag(newTag);
-                                //Add items to a tag
-                                isar.addTagToItems(selectedInventoryItems,newTag);
-                                //clean up stuff
-                                nameController.clear();
-                                setState(() {});
-                                FocusScope.of(context).unfocus();
-                                Navigator.pop(context);
-                              },
-                              child: const Text("Submit"),
-                            ),
-                          )
                         ],
                       ),
                     )
@@ -90,6 +72,85 @@ class _AddTagPageState extends State<AddTagPage> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _submitButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        _addButton(),
+        const SizedBox(
+          width: 10.0,
+        ),
+        _addAnotherButton(),
+      ],
+    );
+  }
+
+  Widget _addButton() {
+    return FloatingActionButton(
+      heroTag: "btn1",
+      onPressed: () async {
+        IsarService isar = IsarService();
+        //Add tag
+        Tag newTag = Tag(nameController.value.text);
+        isar.addTag(newTag);
+        //Add items to a tag
+        isar.addTagToItems(selectedInventoryItems,newTag);
+        //clean up stuff
+        nameController.clear();
+        setState(() {});
+        FocusScope.of(context).unfocus();
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Tag was Successfully Created!",style: TextStyle(
+              color: Colors.white,
+            ),),
+            backgroundColor: Color.fromRGBO(205, 0, 0, 1),
+
+          ),
+        );
+      },
+      shape: const CircleBorder(),
+      child: const Icon(
+        Icons.check,
+        color: Colors.white,
+      ),
+    );
+  }
+
+  Widget _addAnotherButton() {
+    return FloatingActionButton(
+      heroTag: "btn2",
+      onPressed: () async {
+        IsarService isar = IsarService();
+        //Add tag
+        Tag newTag = Tag(nameController.value.text);
+        isar.addTag(newTag);
+        //Add items to a tag
+        isar.addTagToItems(selectedInventoryItems,newTag);
+        //clean up stuff
+        nameController.clear();
+        FocusScope.of(context).unfocus();
+        selectedInventoryItems = [];
+        setState(() {});
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Tag was Successfully Created!",style: TextStyle(
+              color: Colors.white,
+            ),),
+            backgroundColor: Color.fromRGBO(205, 0, 0, 1),
+
+          ),
+        );
+      },
+      shape: const CircleBorder(),
+      child: const Icon(
+        Icons.autorenew_rounded,
+        color: Colors.white,
       ),
     );
   }
