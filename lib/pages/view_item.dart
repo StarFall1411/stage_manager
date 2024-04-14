@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:stage_manager/models/inventory_item_model.dart';
 import 'package:stage_manager/pages/item_settings.dart';
 
@@ -49,68 +51,74 @@ class _ViewItemPageState extends State<ViewItemPage> {
     return Center(
       child: SizedBox(
         width: screenWidth - 30.0,
-        child: Column(
-          children: [
-            Expanded(
-                child: Column(
-              children: [
-                ListView(
-                  shrinkWrap: true,
-                  children: [
-                    Column(
-                      children: [
-                        const SizedBox(
-                          height: 10.0,
+        child: Expanded(
+          child: Column(
+            children: [
+              Expanded(
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            const Text(
+                              "Item Image:",
+                              style: TextStyle(fontSize: 20.0),
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            _itemImage(nonDefaultImage),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            const Text(
+                              "Item Information:",
+                              style: TextStyle(fontSize: 20.0),
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            _nameLocation(screenWidth),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            _description(screenWidth),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            const Text(
+                              "Tags:",
+                              style: TextStyle(fontSize: 20.0),
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            _tags(),
+                          ],
                         ),
-                        const Text(
-                          "Item Image:",
-                          style: TextStyle(fontSize: 20.0),
-                        ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        _itemImage(nonDefaultImage),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        const Text(
-                          "Item Information:",
-                          style: TextStyle(fontSize: 20.0),
-                        ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        _nameLocation(screenWidth),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        _description(screenWidth),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        const Text(
-                          "Tags:",
-                          style: TextStyle(fontSize: 20.0),
-                        ),
-                        _tags(),
-                      ],
-                    ),
-                  ],
-                )
-              ],
-            ))
-          ],
+                      ),
+                    ],
+                  ))
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget _tags() {
+    List<Widget> tagWidgets = _getWidgetTags();
     return Column(
       children: [
-        Row(
-          children: _getWidgetTags(),
-        ),
+        tagWidgets.isNotEmpty
+            ? Wrap(
+                children: tagWidgets,
+              )
+            : const Text("No Tags have been Chosen"),
       ],
     );
   }
@@ -121,7 +129,10 @@ class _ViewItemPageState extends State<ViewItemPage> {
     for (Tag tag in widget.inventoryItem.tags) {
       tagWidgets.add(
         Card(
-          child: Text(tag.name),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(tag.name),
+          ),
         ),
       );
     }
