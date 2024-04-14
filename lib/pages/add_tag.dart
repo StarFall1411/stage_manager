@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:stage_manager/models/inventory_item_model.dart';
 import 'package:stage_manager/isar_service.dart';
@@ -62,7 +64,10 @@ class _AddTagPageState extends State<AddTagPage> {
                             ),
                           ),
                           const SizedBox(height: 10.0),
-                          _itemTable(widget.inventoryItems),
+                          SizedBox(
+                            width: screenWidth - 30.0,
+                            child: _itemTable(widget.inventoryItems),
+                          ),
                         ],
                       ),
                     )
@@ -98,7 +103,7 @@ class _AddTagPageState extends State<AddTagPage> {
         Tag newTag = Tag(nameController.value.text);
         isar.addTag(newTag);
         //Add items to a tag
-        isar.addTagToItems(selectedInventoryItems,newTag);
+        isar.addTagToItems(selectedInventoryItems, newTag);
         //clean up stuff
         nameController.clear();
         setState(() {});
@@ -106,11 +111,13 @@ class _AddTagPageState extends State<AddTagPage> {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text("Tag was Successfully Created!",style: TextStyle(
-              color: Colors.white,
-            ),),
+            content: Text(
+              "Tag was Successfully Created!",
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
             backgroundColor: Color.fromRGBO(205, 0, 0, 1),
-
           ),
         );
       },
@@ -131,7 +138,7 @@ class _AddTagPageState extends State<AddTagPage> {
         Tag newTag = Tag(nameController.value.text);
         isar.addTag(newTag);
         //Add items to a tag
-        isar.addTagToItems(selectedInventoryItems,newTag);
+        isar.addTagToItems(selectedInventoryItems, newTag);
         //clean up stuff
         nameController.clear();
         FocusScope.of(context).unfocus();
@@ -139,11 +146,13 @@ class _AddTagPageState extends State<AddTagPage> {
         setState(() {});
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text("Tag was Successfully Created!",style: TextStyle(
-              color: Colors.white,
-            ),),
+            content: Text(
+              "Tag was Successfully Created!",
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
             backgroundColor: Color.fromRGBO(205, 0, 0, 1),
-
           ),
         );
       },
@@ -157,10 +166,11 @@ class _AddTagPageState extends State<AddTagPage> {
 
   Widget _itemTable(List<InventoryItem> inventoryItems) {
     //TODO add photos to this later
-    final columns = ["Item Name"];
+    final columns = ["Item Picture", "Item Name"];
     return DataTable(
       columns: _getColumns(columns),
       rows: _getRows(inventoryItems),
+      dataRowMaxHeight: 100.0,
     );
   }
 
@@ -170,18 +180,59 @@ class _AddTagPageState extends State<AddTagPage> {
           ))
       .toList();
 
-  List<DataRow> _getRows(List<InventoryItem> inventoryItems) => inventoryItems
-      .map((InventoryItem inventoryItem) => DataRow(
-              selected: selectedInventoryItems.contains(inventoryItem),
-              onSelectChanged: (isSelected) => setState(() {
-                    final isAdding = isSelected != null && isSelected;
+  List<DataRow> _getRows(List<InventoryItem> inventoryItems) =>
+      inventoryItems.map((InventoryItem inventoryItem) {
+        Widget avatarPicture = inventoryItem.picture!.contains("default.png")
+            ? Image.asset(
+                inventoryItem.picture!,
+                height: 90.0,
+                width: 90.0,
+                fit: BoxFit.cover,
+              )
+            : Image.file(
+                File(inventoryItem.picture!),
+                height: 90.0,
+                width: 90.0,
+                fit: BoxFit.cover,
+              );
+        return DataRow(
+            selected: selectedInventoryItems.contains(inventoryItem),
+            onSelectChanged: (isSelected) => setState(() {
+                  final isAdding = isSelected != null && isSelected;
 
-                    isAdding
-                        ? selectedInventoryItems.add(inventoryItem)
-                        : selectedInventoryItems.remove(inventoryItem);
-                  }),
-              cells: [
-                DataCell(Text(inventoryItem.name)),
-              ]))
-      .toList();
+                  isAdding
+                      ? selectedInventoryItems.add(inventoryItem)
+                      : selectedInventoryItems.remove(inventoryItem);
+                }),
+            cells: [
+              DataCell(
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12.0),
+                  child: avatarPicture,
+                ),
+              ),
+              DataCell(Text(inventoryItem.name)),
+            ]);
+      }).toList();
 }
+// DataRow(
+//     selected: selectedInventoryItems.contains(inventoryItem),
+//     onSelectChanged: (isSelected) =>
+//         setState(() {
+//           final isAdding = isSelected != null && isSelected;
+//
+//           isAdding
+//               ? selectedInventoryItems.add(inventoryItem)
+//               : selectedInventoryItems.remove(inventoryItem);
+//         }),
+//     cells: [
+//       DataCell(CircleAvatar(
+//         backgroundImage: inventoryItem.picture!.contains(
+//             "default.png") ?
+//         Image.asset(
+//           inventoryItem.picture!,)
+//             : Image.file(,),
+//       ),),
+//       DataCell(Text(inventoryItem.name)),
+//     ]))
+// .toList();
