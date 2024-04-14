@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:isar/isar.dart';
 import 'package:stage_manager/models/inventory_item_model.dart';
 import 'package:stage_manager/pages/item_settings.dart';
 
@@ -56,53 +57,53 @@ class _ViewItemPageState extends State<ViewItemPage> {
             children: [
               Expanded(
                   child: ListView(
-                    shrinkWrap: true,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          children: [
-                            const SizedBox(
-                              height: 10.0,
-                            ),
-                            const Text(
-                              "Item Image:",
-                              style: TextStyle(fontSize: 20.0),
-                            ),
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                            _itemImage(nonDefaultImage),
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                            const Text(
-                              "Item Information:",
-                              style: TextStyle(fontSize: 20.0),
-                            ),
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                            _nameLocation(screenWidth),
-                            const SizedBox(
-                              height: 10.0,
-                            ),
-                            _description(screenWidth),
-                            const SizedBox(
-                              height: 10.0,
-                            ),
-                            const Text(
-                              "Tags:",
-                              style: TextStyle(fontSize: 20.0),
-                            ),
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                            _tags(),
-                          ],
+                shrinkWrap: true,
+                children: [
+                  Expanded(
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 10.0,
                         ),
-                      ),
-                    ],
-                  ))
+                        const Text(
+                          "Item Image:",
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        _itemImage(nonDefaultImage),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        const Text(
+                          "Item Information:",
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        _nameLocation(screenWidth),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        _description(screenWidth),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        const Text(
+                          "Tags:",
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        _tags(),
+                      ],
+                    ),
+                  ),
+                ],
+              ))
             ],
           ),
         ),
