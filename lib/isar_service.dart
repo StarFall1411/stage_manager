@@ -58,7 +58,7 @@ class IsarService {
 
   Future<List<InventoryItem>> getAllInventoryItems() async {
     final isar = await db;
-    return await isar.inventoryItems.where().findAll();
+    return await isar.inventoryItems.where().sortByName().findAll();
   }
 
   Stream<List<InventoryItem>> getAllFilteredInventoryItems(String searchString,List<Tag> filterTags) async* {//TODO better searches

@@ -51,6 +51,12 @@ class _AddTagPageState extends State<AddTagPage> {
                           const SizedBox(
                             height: 10.0,
                           ),
+                          const Text(
+                            "Tag Information",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(fontSize: 20.0),
+                          ),
+                          SizedBox(height: 10.0),
                           SizedBox(
                             width: screenWidth - 30.0, //TODO decide on width
                             child: TextField(
@@ -64,6 +70,12 @@ class _AddTagPageState extends State<AddTagPage> {
                             ),
                           ),
                           const SizedBox(height: 10.0),
+                          const Text(
+                            "Add Items to Tag",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(fontSize: 20.0),
+                          ),
+                          const SizedBox(height: 3.0),
                           SizedBox(
                             width: screenWidth - 30.0,
                             child: _itemTable(widget.inventoryItems),

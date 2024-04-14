@@ -151,9 +151,9 @@ class _AddItemPageState extends State<AddItemPage> {
                             minLines: 2,
                           ),
                         ),
-                        SizedBox(height: 10.0),
-                        Text(
-                          "Add Tags",
+                        const SizedBox(height: 10.0),
+                        const Text(
+                          "Add Tags to Item",
                           textAlign: TextAlign.start,
                           style: TextStyle(fontSize: 20.0),
                         ),
