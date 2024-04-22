@@ -10,13 +10,13 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:math';
 
 import '../models/tag_model.dart';
+import 'package:stage_manager/globals.dart' as globals;
 
 class EditItemPage extends StatefulWidget {
   InventoryItem inventoryItem;
-  final List<Tag> tags;
-  List<Tag> selectedTags;
+  final List<Tag> allTags;
 
-  EditItemPage({Key? key, required this.inventoryItem, required this.tags,required this.selectedTags})
+  EditItemPage({Key? key, required this.inventoryItem, required this.allTags})
       : super(key: key);
 
   @override
@@ -41,6 +41,7 @@ class _EditItemPageState extends State<EditItemPage> {
       _imagePath = widget.inventoryItem.picture!;
       _image = File(_imagePath);
     }
+
 
     return Scaffold(
       appBar: AppBar(
@@ -161,7 +162,7 @@ class _EditItemPageState extends State<EditItemPage> {
                         ),
                         SizedBox(
                             width: screenWidth - 30.0,
-                            child: _tagTable(widget.tags)),
+                            child: _tagTable(widget.allTags)),
                       ],
                     ),
                   ]),
@@ -215,7 +216,7 @@ class _EditItemPageState extends State<EditItemPage> {
         widget.inventoryItem.description = descriptionController.text;
         widget.inventoryItem.location = locationController.text;
         //updates the item in the database
-        isar.updateItem(widget.inventoryItem,widget.selectedTags);
+        isar.updateItem(widget.inventoryItem,globals.selectedTags);
         //Cleans stuff up on the page
         nameController.clear();
         locationController.clear();
@@ -259,16 +260,37 @@ class _EditItemPageState extends State<EditItemPage> {
 
   List<DataRow> _getRows(List<Tag> tags) => tags
       .map((Tag tag) => DataRow(
-      selected: widget.selectedTags.contains(tag),
+      selected: _isSelected(tag),
       onSelectChanged: (isSelected) => setState(() {
         final isAdding = isSelected != null && isSelected;
 
-        isAdding ? widget.selectedTags.add(tag) : widget.selectedTags.remove(tag);
+        isAdding ? globals.selectedTags.add(tag) : _removeTag(tag);
       }),
       cells: [
         DataCell(Text(tag.name)),
       ]))
       .toList();
+
+  void _removeTag(Tag tag){
+    List<Tag> tags = globals.selectedTags;
+    for(int i =0;i<tags.length;i++){
+      if(tags[i].id == tag.id){
+        globals.selectedTags.removeAt(i);
+        break;
+      }
+    }
+  }
+
+  bool _isSelected(Tag tag){
+   bool selected = false;
+    for(Tag curSelectedTag in globals.selectedTags){
+      if(curSelectedTag.id == tag.id){
+        selected = true;
+        break;
+      }
+    }
+    return selected;
+  }
 
   Future _showOptions() async {
     showCupertinoModalPopup(

@@ -5,6 +5,7 @@ import 'package:stage_manager/pages/inventory.dart';
 import '../isar_service.dart';
 import '../models/inventory_item_model.dart';
 import '../models/tag_model.dart';
+import 'package:stage_manager/globals.dart' as globals;
 
 class ItemSettingsPage extends StatefulWidget {
   final InventoryItem inventoryItem;
@@ -53,13 +54,13 @@ class _ItemSettingsPageState extends State<ItemSettingsPage> {
             });
           });
           widget.inventoryItem.tags.load();
+          globals.selectedTags = widget.inventoryItem.tags.toList();
           Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => EditItemPage(
                   inventoryItem: widget.inventoryItem,
-                  tags: tags,
-                  selectedTags: widget.inventoryItem.tags.toList(),
+                  allTags: tags.toList(),
                 ),
               ));
         },
