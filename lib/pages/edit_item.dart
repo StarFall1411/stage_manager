@@ -191,7 +191,6 @@ class _EditItemPageState extends State<EditItemPage> {
             itemImagePath = globals.curEditItem.picture!;
           } else {
             //change made
-            if(_oldFilePath!.contains("default.png")){
               //Need to create entirely new image with new name
               final Directory applicationDocDirect =
               await getApplicationDocumentsDirectory();
@@ -201,11 +200,6 @@ class _EditItemPageState extends State<EditItemPage> {
               final File newImage = await _image!.copy(
                   '$copyToPath/${nameController.value.text}${_random(1, 1000).toString()}.png');
               itemImagePath = newImage.path;
-            }else{
-              //Need to take the new image and copy it to the old path to overwrite it
-              final File newImage = await _image!.copy(_oldFilePath!);
-              itemImagePath = newImage.path;
-            }
           }
         } else {
           //default picture no change made
