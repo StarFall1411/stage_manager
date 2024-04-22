@@ -55,11 +55,11 @@ class _ItemSettingsPageState extends State<ItemSettingsPage> {
           });
           widget.inventoryItem.tags.load();
           globals.selectedTags = widget.inventoryItem.tags.toList();
+          globals.curEditItem = widget.inventoryItem;
           Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => EditItemPage(
-                  inventoryItem: widget.inventoryItem,
                   allTags: tags.toList(),
                 ),
               ));
@@ -107,13 +107,10 @@ class _ItemSettingsPageState extends State<ItemSettingsPage> {
                           Navigator.of(context).pop();
                           Navigator.of(context).pop();
                           Navigator.of(context).pop();
-                          Navigator.of(context).pop();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                const InventoryPage()),
-                          );
+                          setState(() {
+                          });
+                          setState(() {
+                          });
                         },
                         child: const Text("Yes")),
                     TextButton(

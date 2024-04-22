@@ -13,10 +13,9 @@ import '../models/tag_model.dart';
 import 'package:stage_manager/globals.dart' as globals;
 
 class EditItemPage extends StatefulWidget {
-  InventoryItem inventoryItem;
   final List<Tag> allTags;
 
-  EditItemPage({Key? key, required this.inventoryItem, required this.allTags})
+  EditItemPage({Key? key,required this.allTags})
       : super(key: key);
 
   @override
@@ -26,6 +25,10 @@ class EditItemPage extends StatefulWidget {
 class _EditItemPageState extends State<EditItemPage> {
   IsarService isar = IsarService();
 
+  TextEditingController nameController = TextEditingController(text: globals.curEditItem.name);
+  TextEditingController locationController = TextEditingController(text: globals.curEditItem.location ?? "");
+  TextEditingController descriptionController = TextEditingController(text: globals.curEditItem.description ?? "");
+
   final picker = ImagePicker();
   String _imagePath = 'assets/default.png';
   File? _image;
@@ -34,11 +37,8 @@ class _EditItemPageState extends State<EditItemPage> {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController nameController = TextEditingController(text: widget.inventoryItem.name);
-    TextEditingController locationController = TextEditingController(text: widget.inventoryItem.location ?? "");
-    TextEditingController descriptionController = TextEditingController(text: widget.inventoryItem.description ?? "");
-    if(!widget.inventoryItem.picture!.contains("default.png")){
-      _imagePath = widget.inventoryItem.picture!;
+    if(!globals.curEditItem.picture!.contains("default.png")){
+      _imagePath = globals.curEditItem.picture!;
       _image = File(_imagePath);
     }
 
@@ -49,12 +49,12 @@ class _EditItemPageState extends State<EditItemPage> {
         centerTitle: true,
         title: const Text("Edit Item"),
       ),
-      floatingActionButton: _addButton(nameController, locationController, descriptionController),
-      body: _body(nameController,locationController,descriptionController),
+      floatingActionButton: _addButton(),
+      body: _body(),
     );
   }
 
-  Widget _body(TextEditingController nameController,TextEditingController locationController,TextEditingController descriptionController) {
+  Widget _body() {
     double screenWidth = MediaQuery.of(context).size.width;
     return Column(
       children: [
@@ -175,7 +175,7 @@ class _EditItemPageState extends State<EditItemPage> {
     );
   }
 
-  Widget _addButton(TextEditingController nameController,TextEditingController locationController,TextEditingController descriptionController) {
+  Widget _addButton() {
     return FloatingActionButton(
       heroTag: "btn1",
       onPressed: () async {
@@ -186,7 +186,7 @@ class _EditItemPageState extends State<EditItemPage> {
           //real life photo
           if(_oldFilePath == null){
             //No change made
-            itemImagePath = widget.inventoryItem.picture!;
+            itemImagePath = globals.curEditItem.picture!;
           } else {
             //change made
             if(_oldFilePath!.contains("default.png")){
@@ -211,12 +211,13 @@ class _EditItemPageState extends State<EditItemPage> {
         }
 
         //Edits old inventory item information with new information
-        widget.inventoryItem.name = nameController.text;
-        widget.inventoryItem.picture = itemImagePath;
-        widget.inventoryItem.description = descriptionController.text;
-        widget.inventoryItem.location = locationController.text;
+        globals.curEditItem.name = nameController.text;
+        globals.curEditItem.picture = itemImagePath;
+        globals.curEditItem.description = descriptionController.text;
+        globals.curEditItem.location = locationController.text;
+        // InventoryItem(nameController.text,itemImagePath,descriptionController.text,locationController.text,globals.curEditItem.itemType);
         //updates the item in the database
-        isar.updateItem(widget.inventoryItem,globals.selectedTags);
+        isar.updateItem(globals.curEditItem,globals.selectedTags);
         //Cleans stuff up on the page
         nameController.clear();
         locationController.clear();
@@ -224,6 +225,9 @@ class _EditItemPageState extends State<EditItemPage> {
         setState(() {});
         FocusScope.of(context).unfocus();
         Navigator.pop(context);
+        Navigator.pop(context);
+        setState(() {
+        });
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text(

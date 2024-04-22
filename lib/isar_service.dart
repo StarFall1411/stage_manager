@@ -3,6 +3,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:stage_manager/models/inventory_item_model.dart';
 import 'package:stage_manager/models/tag_model.dart';
 import 'models/inventory_model.dart';
+import 'package:stage_manager/globals.dart' as globals;
 
 class IsarService {
   late Future<Isar> db;
@@ -33,6 +34,10 @@ class IsarService {
   Future<void> updateItem(InventoryItem item,List<Tag> tags) async{
     final isar = await db;
 
+    isar.writeTxnSync(() async {
+      await isar.inventoryItems.putSync(item);
+    });
+
     InventoryItem? databaseItem = await isar.inventoryItems.where().idEqualTo(item.id).findFirst();
     databaseItem?.tags.load();
     databaseItem?.tags.clear();
@@ -41,23 +46,12 @@ class IsarService {
       databaseItem?.tags.add(tag);
     }
     isar.writeTxnSync(() async {
-      return await databaseItem?.tags.save();
-    });
-    isar.writeTxnSync(() async {
       await isar.inventoryItems.putSync(databaseItem!);
     });
 
-    // InventoryItem? databaseItem = await isar.inventoryItems.where().idEqualTo(item.id).findFirst();
-    // databaseItem?.tags.load();
-    // databaseItem?.tags.clear();
-    // isar.writeTxnSync((){
-    //   isar.inventoryItems.putSync(databaseItem!);
-    // });
-    //
-    // addTagsToItem(databaseItem!, tags);
-
-
-
+    InventoryItem? updatedItem = await isar.inventoryItems.where().idEqualTo(item.id).findFirst();
+    globals.curEditItem = updatedItem!;
+    globals.selectedTags = tags.toList();
   }
 
   Future<void> addTagsToItem(InventoryItem newItem,List<Tag> newTags) async{

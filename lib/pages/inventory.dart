@@ -28,10 +28,10 @@ class _InventoryPageState extends State<InventoryPage> {
         centerTitle: true,
         title: const Text('Inventory'),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.settings),
-          )
+          // IconButton(
+          //   onPressed: () {},
+          //   icon: const Icon(Icons.settings),
+          // )
         ],
       ),
       floatingActionButton: FloatingActionButton(
