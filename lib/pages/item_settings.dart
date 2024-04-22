@@ -29,109 +29,119 @@ class _ItemSettingsPageState extends State<ItemSettingsPage> {
       body: Center(
         child: Column(
           children: [
-            _editItem(),
-            _deleteItem(),
+            SizedBox(height: 10.0,),
+            _editItem(widget.inventoryItem.itemType,"Edit Item",Icons.edit),
+            _deleteItem("Delete Item",Icons.delete),
           ],
         ),
       ),
     );
   }
 
-  Widget _editItem() {
+  Widget _editItem(
+      ItemType itemType, String cardText, IconData cardIcon) {
     double screenWidth = MediaQuery.of(context).size.width;
     IsarService isar = IsarService();
     return SizedBox(
-      width: screenWidth - 15.0,
-      child: Column(
-        children: [
-          GestureDetector(
-            onTap: () async {
-              List<Tag> tags = [];
-              await isar.getAllTags().then((value) {
-                setState(() {
-                  tags = value;
-                });
-              });
-              widget.inventoryItem.tags.load();
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditItemPage(
-                      inventoryItem: widget.inventoryItem,
-                      tags: tags,
-                      selectedTags: widget.inventoryItem.tags.toList(),
-                    ),
-                  ));
-            },
-            child: const Card(
-              child: SizedBox(
-                height: 100.0,
-                child: Row(
-                  children: [
-                    Text("Edit Item"),
-                  ],
+      width: screenWidth - 20.0,
+      child: GestureDetector(
+        onTap: () async {
+          List<Tag> tags = [];
+          await isar.getAllTags().then((value) {
+            setState(() {
+              tags = value;
+            });
+          });
+          widget.inventoryItem.tags.load();
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EditItemPage(
+                  inventoryItem: widget.inventoryItem,
+                  tags: tags,
+                  selectedTags: widget.inventoryItem.tags.toList(),
                 ),
-              ),
+              ));
+        },
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  cardText,
+                  style: const TextStyle(fontSize: 18.0),
+                ),
+                Icon(
+                  cardIcon,
+                  size: 30.0,
+                )
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
 
-  Widget _deleteItem() {
+  Widget _deleteItem(String cardText, IconData cardIcon) {
     double screenWidth = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: screenWidth - 15.0,
-      child: Column(
-        children: [
-          GestureDetector(
-            onTap: () {
-              showDialog(
-                  context: context,
-                  barrierDismissible: true,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text("Delete ${widget.inventoryItem.name}?"),
-                      content: Text(
-                          "This action will delete ${widget.inventoryItem.name}."),
-                      actions: [
-                        TextButton(
-                            onPressed: () async {
-                              isar.deleteItem(widget.inventoryItem);
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pop();
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const InventoryPage()),
-                              );
-                            },
-                            child: const Text("Yes")),
-                        TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: const Text("No")),
-                      ],
-                    );
-                  });
-            },
-            child: const Card(
-              child: SizedBox(
-                height: 100.0,
-                child: Row(
-                  children: [
-                    Text("Delete Item"),
+      width: screenWidth - 20.0,
+      child: GestureDetector(
+        onTap: () async {
+          showDialog(
+              context: context,
+              barrierDismissible: true,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text("Delete ${widget.inventoryItem.name}?"),
+                  content: Text(
+                      "This action will delete ${widget.inventoryItem.name}."),
+                  actions: [
+                    TextButton(
+                        onPressed: () async {
+                          isar.deleteItem(widget.inventoryItem);
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                const InventoryPage()),
+                          );
+                        },
+                        child: const Text("Yes")),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("No")),
                   ],
+                );
+              });
+        },
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  cardText,
+                  style: const TextStyle(fontSize: 18.0),
                 ),
-              ),
+                Icon(
+                  cardIcon,
+                  size: 30.0,
+                )
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
