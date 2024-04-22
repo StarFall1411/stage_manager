@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:stage_manager/models/inventory_item_model.dart';
 import 'package:stage_manager/isar_service.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:stage_manager/pages/view_item.dart';
 import 'dart:math';
 
 import '../models/tag_model.dart';
@@ -33,12 +34,13 @@ class _EditItemPageState extends State<EditItemPage> {
   String _imagePath = 'assets/default.png';
   File? _image;
   String? _oldFilePath;
+  String curEditItem = globals.curEditItem.picture!;
 
 
   @override
   Widget build(BuildContext context) {
-    if(!globals.curEditItem.picture!.contains("default.png")){
-      _imagePath = globals.curEditItem.picture!;
+    if(!curEditItem.contains("default.png")){
+      _imagePath = curEditItem;
       _image = File(_imagePath);
     }
 
@@ -226,6 +228,16 @@ class _EditItemPageState extends State<EditItemPage> {
         FocusScope.of(context).unfocus();
         Navigator.pop(context);
         Navigator.pop(context);
+        Navigator.pop(context);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ViewItemPage(
+                  inventoryItem:
+                  globals.curEditItem,
+                )));
+        setState(() {
+        });
         setState(() {
         });
         ScaffoldMessenger.of(context).showSnackBar(
@@ -333,7 +345,10 @@ class _EditItemPageState extends State<EditItemPage> {
         _oldFilePath = _imagePath;
         _image = File(pickedImage.path);
         _imagePath = pickedImage.path;
+        curEditItem = pickedImage.path;
       }
+    });
+    setState(() {
     });
   }
 
@@ -346,7 +361,10 @@ class _EditItemPageState extends State<EditItemPage> {
         _oldFilePath = _imagePath;
         _image = File(pickedImage.path);
         _imagePath = pickedImage.path;
+        curEditItem = pickedImage.path;
       }
+    });
+    setState(() {
     });
   }
 
