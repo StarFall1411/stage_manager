@@ -102,6 +102,11 @@ class _ItemSettingsPageState extends State<ItemSettingsPage> {
                       "This action will delete ${widget.inventoryItem.name}."),
                   actions: [
                     TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("No")),
+                    TextButton(
                         onPressed: () async {
                           isar.deleteItem(widget.inventoryItem);
                           Navigator.of(context).pop();
@@ -113,11 +118,6 @@ class _ItemSettingsPageState extends State<ItemSettingsPage> {
                           });
                         },
                         child: const Text("Yes")),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text("No")),
                   ],
                 );
               });
